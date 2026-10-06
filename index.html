@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Climate Action Challenge — SDG 13</title>
+<style>
+:root{
+  --green:#15966f; --dark:#174b47; --light:#eefaf6; --blue:#2380b9;
+  --yellow:#f3c84b; --red:#d95757; --card:#fff; --muted:#607775;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;font-family:Arial,Helvetica,sans-serif;color:var(--dark);
+  background:radial-gradient(circle at 90% 0,#d9f4ed,transparent 32%),
+             linear-gradient(135deg,#eef9f6,#f5f9ff);
+}
+.container{width:min(1100px,92%);margin:auto}
+header{text-align:center;padding:40px 0 25px}
+.badge{
+  display:inline-block;padding:8px 15px;border-radius:999px;
+  background:#d8f2e9;color:#08745a;font-weight:800;font-size:.85rem;
+}
+h1{font-size:clamp(2.1rem,5vw,3.7rem);margin:15px 0 8px}
+.subtitle{max-width:800px;margin:auto;color:var(--muted);line-height:1.6;font-size:1.08rem}
+.info,.game-card{
+  background:var(--card);border-radius:25px;padding:27px;
+  box-shadow:0 14px 45px #174b4716;margin-bottom:28px;
+}
+.info h2{color:var(--blue);margin-top:0}
+.info p{line-height:1.7;margin-bottom:0}
+.game-top{
+  display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap
+}
+.game-top h2{margin:0 0 6px}
+.instructions{margin:0;color:var(--muted);line-height:1.5}
+.stats{display:flex;gap:9px;flex-wrap:wrap}
+.stat{padding:10px 13px;border-radius:13px;background:#f1f7f7;font-weight:800}
+button{
+  border:0;border-radius:13px;padding:12px 19px;background:var(--green);
+  color:#fff;font-weight:800;cursor:pointer;font-size:.95rem
+}
+button:hover{filter:brightness(.94)}
+#game{
+  position:relative;height:470px;margin-top:20px;overflow:hidden;border-radius:22px;
+  border:3px solid #d9ecea;
+  background:
+    radial-gradient(circle at 15% 16%,#fff 0 24px,transparent 25px),
+    radial-gradient(circle at 78% 18%,#fff 0 20px,transparent 21px),
+    linear-gradient(#bfeeff 0 63%,#b7e3aa 63% 100%);
+}
+.sun{
+  position:absolute;right:7%;top:28px;width:65px;height:65px;border-radius:50%;
+  background:#ffd75a;box-shadow:0 0 30px #ffd75a99
+}
+.hill1,.hill2{position:absolute;bottom:95px;border-radius:50% 50% 0 0}
+.hill1{left:-10%;width:65%;height:115px;background:#9bd28e}
+.hill2{right:-10%;width:65%;height:95px;background:#86c67e}
+.item{
+  position:absolute;width:82px;height:82px;border-radius:19px;display:flex;
+  align-items:center;justify-content:center;cursor:pointer;user-select:none;
+  box-shadow:0 8px 17px #0002;transition:transform .14s,opacity .2s
+}
+.item:hover{transform:scale(1.1) rotate(-2deg)}
+.item .emoji{font-size:41px}
+.basket{
+  position:absolute;bottom:12px;width:155px;height:105px;border-radius:18px 18px 34px 34px;
+  display:flex;align-items:center;justify-content:center;text-align:center;color:#fff;
+  font-weight:900;border:5px solid #ffffffaa;box-shadow:0 10px 20px #0003
+}
+#greenBasket{left:calc(50% - 175px);background:linear-gradient(145deg,#159b72,#08624f)}
+#redBasket{left:calc(50% + 20px);background:linear-gradient(145deg,#d95a5a,#943737)}
+.basket span{font-size:12px;line-height:1.25;padding:7px}
+#message{min-height:30px;text-align:center;font-weight:800;margin-top:14px;line-height:1.45}
+.tip{
+  margin-top:15px;background:#f5f9f9;border-radius:14px;padding:13px 16px;
+  color:#506967;font-size:.92rem;line-height:1.5
+}
+@media(max-width:680px){
+  #game{height:520px}
+  #greenBasket{left:7%} #redBasket{right:7%;left:auto}
+  .basket{width:135px}
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<header>
+  <div class="badge">SDG 13 • Climate Action</div>
+  <h1>Climate Action Challenge</h1>
+  <p class="subtitle">
+    Learn how everyday choices can help reduce climate impacts and build a more sustainable future.
+  </p>
+</header>
+
+<section class="info">
+  <h2>Why is climate education important?</h2>
+  <p>
+    Climate change affects people, communities and the environment. Education and awareness can
+    help people understand these challenges and take action. Sustainable habits, responsible choices
+    and solutions based on nature can all contribute to a healthier and more sustainable future.
+    Learning about climate action helps us turn knowledge into practical decisions.
+  </p>
+</section>
+
+<section class="game-card">
+  <div class="game-top">
+    <div>
+      <h2>Sort the Climate Actions!</h2>
+      <p class="instructions">
+        Click an item and send it to the correct basket. Put climate-friendly actions in the green
+        basket and climate-harmful choices in the red basket. You have 60 seconds!
+      </p>
+    </div>
+
+    <div class="stats">
+      <div class="stat">Score: <span id="score">0</span></div>
+      <div class="stat">Lives: <span id="lives">3</span></div>
+      <div class="stat">Time: <span id="time">60</span>s</div>
+    </div>
+
+    <button id="startBtn">Start Game</button>
+  </div>
+
+  <div id="game">
+    <div class="sun"></div>
+    <div class="hill1"></div><div class="hill2"></div>
+
+    <div id="greenBasket" class="basket">
+      <span>CLIMATE<br>FRIENDLY</span>
+    </div>
+
+    <div id="redBasket" class="basket">
+      <span>CLIMATE<br>HARMFUL</span>
+    </div>
+  </div>
+
+  <div id="message">Press “Start Game” to begin.</div>
+
+  <div class="tip">
+    <strong>Climate vocabulary:</strong>
+    sustainability • renewable energy • pollution • emissions • recycling • conservation •
+    climate action • awareness
+  </div>
+</section>
+</div>
+
+<script>
+const game = document.getElementById("game");
+const scoreEl = document.getElementById("score");
+const livesEl = document.getElementById("lives");
+const timeEl = document.getElementById("time");
+const message = document.getElementById("message");
+const startBtn = document.getElementById("startBtn");
+
+let score=0, lives=3, time=60, running=false, timer, spawnTimer, items=[];
+
+const actions = [
+  {emoji:"🚲", name:"riding a bicycle", correct:"friendly", fact:"Cycling can reduce transport emissions."},
+  {emoji:"🌳", name:"planting trees", correct:"friendly", fact:"Trees can support nature-based climate solutions."},
+  {emoji:"☀️", name:"using solar energy", correct:"friendly", fact:"Solar power is a renewable energy source."},
+  {emoji:"🚌", name:"using public transport", correct:"friendly", fact:"Shared transport can reduce emissions per passenger."},
+  {emoji:"♻️", name:"recycling materials", correct:"friendly", fact:"Recycling can help reduce waste and resource use."},
+  {emoji:"🥤", name:"using a reusable bottle", correct:"friendly", fact:"Reusable products can reduce unnecessary waste."},
+  {emoji:"💡", name:"turning off unused lights", correct:"friendly", fact:"Saving energy is a simple sustainable habit."},
+  {emoji:"🚗", name:"driving alone for every short trip", correct:"harmful", fact:"Choosing active or shared transport can be more sustainable."},
+  {emoji:"🔥", name:"burning waste", correct:"harmful", fact:"Burning waste can create air pollution."},
+  {emoji:"💨", name:"leaving a vehicle engine running", correct:"harmful", fact:"Idling a vehicle wastes fuel and produces emissions."},
+  {emoji:"🗑️", name:"throwing recyclable items into general waste", correct:"harmful", fact:"Better waste management can reduce unnecessary waste."},
+  {emoji:"💧", name:"wasting water", correct:"harmful", fact:"Responsible resource use is part of sustainability."}
+];
+
+function clearItems(){
+  items.forEach(i=>i.el.remove());
+  items=[];
+}
+
+function spawnItem(){
+  if(!running) return;
+
+  const type=actions[Math.floor(Math.random()*actions.length)];
+  const el=document.createElement("div");
+  el.className="item";
+  el.innerHTML=`<span class="emoji">${type.emoji}</span>`;
+  el.title=type.name;
+  el.style.left=(18+Math.random()*(game.clientWidth-115))+"px";
+  el.style.top=(55+Math.random()*245)+"px";
+  el.style.background=type.correct==="friendly" ? "#e5fff5" : "#fff0ed";
+  el.dataset.correct=type.correct;
+
+  el.addEventListener("click",()=>chooseItem(el,type));
+  game.appendChild(el);
+  items.push({el,type});
+
+  setTimeout(()=>{
+    if(el.parentNode){
+      el.remove();
+      items=items.filter(i=>i.el!==el);
+    }
+  },5600);
+}
+
+function chooseItem(el,type){
+  if(!running) return;
+
+  if(type.correct==="friendly"){
+    score+=10;
+    message.innerHTML=`Correct! ${type.name} is a climate-friendly action. <strong>+10</strong><br><small>${type.fact}</small>`;
+    message.style.color="#08745a";
+  }else{
+    lives--;
+    message.innerHTML=`Correct! ${type.name} is a climate-harmful choice. <strong>+10</strong><br><small>${type.fact}</small>`;
+    score+=10;
+    message.style.color="#a33b3b";
+  }
+
+  scoreEl.textContent=score;
+  livesEl.textContent=lives;
+  el.remove();
+  items=items.filter(i=>i.el!==el);
+
+  if(lives<=0) endGame(`Game over! Your final score is ${score}. Try again!`);
+}
+
+function startGame(){
+  clearInterval(timer);
+  clearInterval(spawnTimer);
+  clearItems();
+
+  score=0;lives=3;time=60;running=true;
+  scoreEl.textContent=score;
+  livesEl.textContent=lives;
+  timeEl.textContent=time;
+  message.textContent="Go! Make smart climate choices.";
+  message.style.color="#174b47";
+  startBtn.textContent="Restart Game";
+
+  spawnItem();spawnItem();spawnItem();
+  spawnTimer=setInterval(spawnItem,900);
+
+  timer=setInterval(()=>{
+    time--;
+    timeEl.textContent=time;
+    if(time<=0) endGame(`Time's up! Final score: ${score}.`);
+  },1000);
+}
+
+function endGame(text){
+  running=false;
+  clearInterval(timer);
+  clearInterval(spawnTimer);
+  message.textContent=text;
+  message.style.color="#174b47";
+}
+
+startBtn.addEventListener("click",startGame);
+</script>
+</body>
+</html>
